@@ -5,6 +5,7 @@
 package api
 
 import (
+	"context"
 	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/hex"
@@ -1081,7 +1082,7 @@ func AuthMiddleware(manager *sdkaccess.Manager) gin.HandlerFunc {
 
 				// 2d. Check Rate Limit (RPM)
 				if managedKey.RateLimitRPM > 0 {
-					if !ratelimit.GlobalManager.Allow(managedKey.KeyHash, managedKey.RateLimitRPM) {
+					if !ratelimit.GlobalManager.Allow(managedKey.KeyHash, int(managedKey.RateLimitRPM)) {
 						// 429 Too Many Requests
 						c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "Rate limit exceeded"})
 						return
