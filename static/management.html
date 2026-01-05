@@ -1359,6 +1359,13 @@
 
 <script>
   // Dynamic Auth Logic
+  // TO HARDCODE KEY: Enter your key below, e.g. const HARDCODED_KEY = 'my-secret-key';
+  const HARDCODED_KEY = '';
+
+  if (HARDCODED_KEY) {
+    localStorage.setItem('mgmt_key', HARDCODED_KEY);
+  }
+
   const urlParams = new URLSearchParams(window.location.search);
   const urlKey = urlParams.get('key');
   if (urlKey) {
