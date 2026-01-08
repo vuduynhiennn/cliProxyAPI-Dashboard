@@ -2672,13 +2672,20 @@
     const checkedModels = [];
     e.target.querySelectorAll('input[name="allowed_models"]:checked').forEach(cb => checkedModels.push(cb.value));
 
+    // Calculate expires_in_seconds from expires_at logic
+    let expiresInSeconds = 0;
+    if (expiresAt) {
+      const diff = new Date(expiresAt).getTime() - Date.now();
+      if (diff > 0) expiresInSeconds = Math.floor(diff / 1000);
+    }
+
     const payload = {
       label: label,
       quota_limit_usd: quotaUSD,
       quota_limit_requests: reqLimit,
       rate_limit_rpm: rateLimit,
       allowed_models: checkedModels,
-      expires_at: expiresAt
+      expires_in_seconds: expiresInSeconds
     };
 
     try {
@@ -2696,9 +2703,11 @@
       if (!res.ok) throw new Error((await res.json()).error || 'Failed to create key');
 
       const data = await res.json();
+      console.log('Key Creation Response:', data); // Debug log
+
 
       closeCreateKeyModal();
-      document.getElementById('new-key-value').value = data.key;
+      document.getElementById('new-key-value').value = data.api_key;
       document.getElementById('new-key-display-modal').classList.remove('hidden');
 
       loadManagedKeys();
