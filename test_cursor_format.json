@@ -1,0 +1,69 @@
+{
+  "model": "gemini-claude-sonnet-4-5",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "hello, can you write 'test' to test.md?"}
+      ]
+    },
+    {
+      "role": "assistant", 
+      "content": [
+        {"type": "text", "text": "I will update the content of `test.md`.\n\n", "cache_control": {"type": "ephemeral"}},
+        {"type": "tool_use", "id": "write-1767926800334009511-1", "name": "write", "input": {"file_path": "test.md", "contents": "test"}}
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "write-1767926800334009511-1",
+          "content": [{"type": "text", "text": "Wrote contents to test.md.\n\nWhen you're done with your current set of changes to this file, you should call the read_lints tool with the specific file path and fix any newly introduced errors."}],
+          "cache_control": {"type": "ephemeral"}
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {"type": "text", "text": "Done! I've written 'test' to test.md.", "cache_control": {"type": "ephemeral"}}
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "now please add more content"}
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "write",
+      "description": "Writes a file to the local filesystem.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {"type": "string", "description": "The path to the file to modify."},
+          "contents": {"type": "string", "description": "The contents of the file to write"}
+        },
+        "required": ["file_path", "contents"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "read_file",
+      "description": "Reads a file from the local filesystem.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "target_file": {"type": "string", "description": "The path of the file to read."}
+        },
+        "required": ["target_file"],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "tool_choice": {"type": "auto"}
+}

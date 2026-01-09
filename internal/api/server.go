@@ -226,6 +226,8 @@ func NewServer(cfg *config.Config, authManager *auth.Manager, accessManager *sdk
 		}
 	}
 
+	engine.Use(middleware.RequestSanitizeMiddleware())
+
 	engine.Use(corsMiddleware())
 	wd, err := os.Getwd()
 	if err != nil {
